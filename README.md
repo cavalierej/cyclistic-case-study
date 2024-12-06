@@ -145,24 +145,91 @@ Steps taken for cleaning:
           ;
           ```
         - There were no 'ride_id' values that occurred more than twice.
-- Created the “ride_length” column as an INTERVAL to determine trip length for each trip.
+- Created the “ride_length” column as an INTERVAL to determine trip length for each trip, and overwrote the existing table with the query results.
     - ``` SQL
       SELECT *,
         ended_at - started_at AS ride_length
       FROM 'data-analytics-capstone-437301.capstone.yearly_data'
       ;
       ```
-o	I tried to change the format of the INTERVAL column but unfortunately there is no way to do so in BigQuery while also storing the data as an INTERVAL. I could have extracted the hours, minutes, and seconds and created a column as a STRING, but then it will not be as useful for analysis.
-•	Converted “started_at” from UTC to the local Chicago time zone (Central Time), stored as a DATETIME so it’s not stored and displayed in UTC, but Central Time.
-o	Insert query
-o	Checked to see how Daylight Savings Time was handled, more out of curiosity to determine if it was factored in automatically.
-o	Insert query
-•	Created the “day_of_week” column based on the “started_at_converted” column, to determine on which day the trip began in the appropriate Central Time zone.
-o	Insert query
-o	Used the Google BigQuery Timestamp Functions Reference Documentation to determine which numbers corresponded to which day of the week.
-•	Created “greater_than_one_minute” column as a BOOLEAN, determining if the ride length was at least one minute.
-o	I didn’t delete the values in case I wanted to refer to them in future, but the BOOLEAN values will still allow me to isolate them and only include trips one minute or longer in my analysis.
-o	Insert query
-•	With each column I created, I added it onto the existing table by overwriting it.
-o	This ensured all data remained intact, while also accounting for the need to query only a part of the entire dataset to ensure it is relevant for this analysis.
-o	Insert query (to query only the relevant data)
+    - I tried to change the format of the INTERVAL column but unfortunately there is no way to do so in BigQuery while also storing the data as an INTERVAL. I could have extracted the hours, minutes, and seconds and created a column as a STRING, but then it will not be as useful for analysis.
+- Originally, I converted the 'started_at' and 'ended_at' columns to Central Time using the DATETIME() function, but through later analysis learned this was unnecessary as the values were already in Central Time despite BigQuery indicating UTC.
+- Created 'greater_than_one_minute' column as a BOOLEAN, determining if the ride length was at least one minute, and overwrote the existing table with query results.
+    - I didn’t delete the values in case I wanted to refer to them in future, but the BOOLEAN values will still allow me to isolate them and only include trips one minute or longer in my analysis.
+    - ``` SQL
+      SELECT *,
+        CASE
+          WHEN ride_length < INTERVAL 1 MINUTE THEN FALSE
+          WHEN ride_length >= INTERVAL 1 MINUTE THEN TRUE
+          ELSE NULL
+        END AS greater_than_1_minute
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ;
+      ```
+- Created the 'ride_length_in_minutes' column, and added it to the existing table by overwriting it with the query results.
+    - ``` SQL
+      SELECT *,
+      (ride_length_hour * 60) + ride_length_minute AS ride_length_in_minutes
+      FROM(
+        SELECT *,
+          EXTRACT(HOUR FROM ride_length) AS ride_length_hour,
+          EXTRACT(MINUTE FROM ride_length) AS ride_length_minute
+        FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      )
+      ;
+      ```
+- Created the 'time_of_day' column based on the 'started_at' column, and added it to the table by overwriting it with query results.
+    - ``` SQL
+      SELECT *,
+        CASE
+          WHEN EXTRACT(HOUR FROM started_at) BETWEEN 0 AND 5 THEN "Night"
+          WHEN EXTRACT(HOUR FROM started_at) BETWEEN 6 AND 11 THEN "Morning"
+          WHEN EXTRACT(HOUR FROM started_at) BETWEEN 12 AND 17 THEN "Afternoon"
+          WHEN EXTRACT(HOUR FROM started_at) BETWEEN 18 AND 23 THEN "Evening"
+          ELSE NULL
+        END AS time_of_day
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ;
+      ```
+- Created the 'day_of_week' column based on the 'started_at' column, to determine on which day the trip began in the appropriate Central Time zone. Overwrote the existing table with the query results.
+    - Used the Google BigQuery Timestamp Functions Reference Documentation to determine which numbers corresponded to which day of the week.
+    - ``` SQL
+      SELECT *,
+        CASE
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 1 THEN "Sunday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 2 THEN "Monday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 3 THEN "Tuesday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 4 THEN "Wednesday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 5 THEN "Thursday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 6 THEN "Friday"
+          WHEN EXTRACT(DAYOFWEEK FROM started_at) = 7 THEN "Saturday"
+          ELSE NULL
+        END AS day_of_week
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ```
+- Created the 'type_of_day' column based on the created 'day_of_week' column and overwrote the existing table.
+    - ``` SQL
+      SELECT *,
+        CASE
+          WHEN day_of_week IN ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") THEN "Weekday"
+          WHEN day_of_week IN ("Sunday", "Saturday") THEN "Weekend"
+          ELSE NULL
+        END AS type_of_day
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+     ```
+- Created the 'season' column based on the 'started_at' column, and added it to the table by overwriting it with the query reuslts.
+    - ``` SQL
+      SELECT *,
+        CASE
+          WHEN EXTRACT(MONTH FROM started_at) IN (12,1,2) THEN "Winter"
+          WHEN EXTRACT(MONTH FROM started_at) BETWEEN 3 AND 5 THEN "Spring"
+          WHEN EXTRACT(MONTH FROM started_at) BETWEEN 6 AND 8 THEN "Summer"
+          WHEN EXTRACT(MONTH FROM started_at) BETWEEN 9 AND 11 THEN "Fall"
+          ELSE NULL
+        END AS season
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ;
+      ``` 
+- With each column I created, I added it onto the existing table by overwriting it.
+    - This ensured all data remained intact, while also accounting for the need to query only a part of the entire dataset to ensure it is relevant for this analysis.
+- I then created a final cleaned table to be used for analysis, called 'yearly_data_cleaned'.
