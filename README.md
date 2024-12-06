@@ -73,25 +73,54 @@ I chose to use SQL in BigQuery Studio because Excel and Google Sheets ran too sl
 Steps taken for cleaning:
 
 - Downloaded all 12 datasets from divvy-tripdata for the most recent year, at the time it was September 2023 – August 2024.
-- Saved them all to their own folder.
 -	Unzipped all files.
 -	Uploaded all 12 files to Google Cloud to import them into Big Query.
-    -	I couldn’t import them as attachments nor from Google Drive as many files were over 100 MB.
--	I had to import each file as its own table, then used a query to merge them into one table.
-
-``` SQL Title
-SELECT *
-FROM table
-```
-
-•	Checked for NULL ride_id values.
-o	Insert query
-o	I determined I only wanted to eliminate rows with no valid ride_id, there were no NULL values.
-o	I could have eliminated rows with NULL station_start or station_end values, but I decided to keep them in the analysis for multiple reasons:
-	The rides had a ride_id so they must have been trips that people have taken,
-	I didn’t know whether station_start or station_end meant a transit station or a bike docking station – if it meant a transit station it is realistic that many trips were started in the middle of a street as opposed to a transit station.
-•	Checked for duplicate ride_id values to ensure I wasn’t counting any trip twice.
-o	Insert query
+    -	I couldn’t import them as attachments or from Google Drive as many files were too lage.
+-	I had to import each file as its own table, then used a query to merge them into one table, saving these query results into a new table called 'yearly_data'
+    - ``` SQL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2309_september23'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2310_october23'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2311_november23'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2312_december23'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2401_january24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2402_february24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2403_march24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2404_april24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2405_may24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2406_june24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2407_july24'
+      UNION ALL
+      SELECT * FROM 'data-analytics-capstone-437301.capstone.2408_july24'
+      ;
+      ```
+- Checked for NULL ride_id values.
+    - ``` SQL
+      SELECT COUNT(CASE WHEN ride_id IS NULL THEN 1 END) AS null_count,
+        COUNT(ride_id) AS non_null_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ```
+    - I determined I only wanted to eliminate rows with no valid ride_id, there were no NULL values.
+    - I could have eliminated rows with NULL station_start or station_end values, but I decided to keep them in the analysis for multiple reasons:
+        - The rides had a ride_id so they must have been trips that people have taken,
+        - I didn’t know whether station_start or station_end meant a transit station or a bike docking station – if it meant a transit station it is realistic that many trips were started in the middle of a street as opposed to a transit station.
+- Checked for duplicate ride_id values to ensure I wasn’t counting any trip twice.
+    - ``` SQL
+      SELECT ride_id,
+        COUNT(*) AS count_of_ride_id
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      GROUP BY ride_id
+      HAVING count_of_ride_id > 1
+      ```
 o	There were duplicates, so I had to figure out a way to only include one version of the trip.
 	All duplicates were on Friday, May 31st – could be useful information for programmers.
 •	Created the “ride_id_count” and “duplicate_rank” columns.
