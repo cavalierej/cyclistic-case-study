@@ -137,6 +137,7 @@ Steps taken for cleaning:
       ;
       ```
     - I ranked all the trips, using the 'ended_at' column to distinguish between the duplicates. There was little information between the two duplicate rows to distinguish between them. I reviewed each row individually because there were only around 200 duplicates, so I knew a RANK() function would work; however, if there was absolutely no way to distinguish between the duplicates, a ROW_NUMBER() function would’ve also worked.
+        - This will allow me to select only the unique trips by selecting the highest value from the ranked column.
     - Checked to ensure that no trips were duplicated more than once. From the previous step, I saw that there was only around 200 duplicates and didn’t see any ride_id value with a count higher than 2, but I created a query anyways to be sure.
         - ``` SQL
           SELECT *
@@ -216,7 +217,8 @@ Steps taken for cleaning:
           ELSE NULL
         END AS type_of_day
       FROM 'data-analytics-capstone-437301.capstone.yearly_data'
-     ```
+      ;
+      ```
 - Created the 'season' column based on the 'started_at' column, and added it to the table by overwriting it with the query reuslts.
     - ``` SQL
       SELECT *,
@@ -232,4 +234,14 @@ Steps taken for cleaning:
       ``` 
 - With each column I created, I added it onto the existing table by overwriting it.
     - This ensured all data remained intact, while also accounting for the need to query only a part of the entire dataset to ensure it is relevant for this analysis.
-- I then created a final cleaned table to be used for analysis, called 'yearly_data_cleaned'.
+- I then created a final cleaned table to be used for analysis, by saving the results of a query to a new table called 'yearly_data_cleaned'.
+    - ``` SQL
+      SELECT *
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      WHERE greater_than_one_minute = TRUE
+      AND duplicate_rank = 1
+      ;
+      ```
+After performing these steps to clean my dataset, it was then ready to be analyzed.
+
+## Analyze
