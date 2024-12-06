@@ -2,7 +2,7 @@
 This case study is the capstone project for the Google Data Analytics Certificate. It will focus on Cyclistic, a fictional bike-share company in Chicago, and I will act as a junior data analyst helping to solve a business problem. I will be following the data analysis steps outlined in the certificate: Ask, Prepare, Process, Analyze, Share, and Act. The overarching question to explore is: **How do casual users and members use Cyclistic bikes differently?**
 
 ## Quick Links
-[Tableau Report](https://public.tableau.com/views/CyclisticPresentationDashboard/CyclisticPresentation?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) | [Data Cleaning Queries](01. Process - Data Cleaning.sql)
+[Tableau Report](https://public.tableau.com/views/CyclisticPresentationDashboard/CyclisticPresentation?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) | [Data Cleaning Queries](https://github.com/cavalierej/cyclistic-case-study/blob/0773ed3e7df8b406ab9613e8739beba83cc525c2/01.%20Process%20-%20Data%20Cleaning.sql)
 
 # Background
 ## Cyclistic
