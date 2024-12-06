@@ -1,4 +1,4 @@
---combining all 12 tables
+-- Combining all 12 tables:
 SELECT * FROM data-analytics-capstone-437301.capstone.2309_september23
 UNION ALL
 SELECT * FROM data-analytics-capstone-437301.capstone.2310_october23
