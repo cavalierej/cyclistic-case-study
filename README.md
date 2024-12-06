@@ -163,7 +163,7 @@ Steps taken for cleaning:
           WHEN ride_length < INTERVAL 1 MINUTE THEN FALSE
           WHEN ride_length >= INTERVAL 1 MINUTE THEN TRUE
           ELSE NULL
-        END AS greater_than_1_minute
+        END AS greater_than_one_minute
       FROM 'data-analytics-capstone-437301.capstone.yearly_data'
       ;
       ```
