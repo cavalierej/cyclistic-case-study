@@ -27,10 +27,10 @@ Three questions will guide the future marketing program:
 
 I will be focusing on answering the first question: How do annual members and casual riders use Cyclistic bikes differently?
 
-### Guiding Questions
+## Guiding Questions
 - What is the problem you are trying to solve?
 - How can your insights drive business decisions?
-### Key Tasks
+## Key Tasks
 - Identify the business task
 - Consider key stakeholders
  
@@ -39,7 +39,7 @@ I will be focusing on answering the first question: How do annual members and ca
 I will be using 1 year of Cyclistic’s ridership data to gather insights to inform a marketing plan that aims to convert casual users into members. This plan will be developed by my team, my manager, and will be presented to executives for approval.
 
 # Prepare
-### Guiding Questions
+## Guiding Questions
 - Where is your data located?
 - How is the data organized?
 -	Are there issues with bias or credibility in this data? Does your data ROCCC?
@@ -47,7 +47,7 @@ I will be using 1 year of Cyclistic’s ridership data to gather insights to inf
 -	How did you verify the data’s integrity?
 -	How does it help you answer your question?
 -	Are there any problems with the data?
-### Key Tasks
+## Key Tasks
 - Download data and store it appropriately.
 -	Identify how it’s organized.
 -	Sort and filter the data.
@@ -56,13 +56,13 @@ I will be using 1 year of Cyclistic’s ridership data to gather insights to inf
 The data is organized by month and was accessed directly from the company’s servers. The data was collected by the company directly, it is the primary source of data so has a low chance of bias and high credibility. The data was made publicly available under the company’s [license agreement](https://www.divvybikes.com/data-license-agreement), and does not include personal information to protect user data. It contains useful information to examine basic differences between casual and annual members.
 
 # Process
-### Guiding Questions
+## Guiding Questions
 -	What tools are you choosing and why?
 -	Have you ensured your data’s integrity?
 -	What steps have you taken to ensure that your data is clean?
 -	How can you verify that your data is clean and ready to analyze?
 -	Have you documented your cleaning process so you can review and share those results?
-### Key Tasks
+## Key Tasks
 - Check the data for errors.
 -	Choose your tools.
 -	Transform the data so you can work with it effectively.
