@@ -108,28 +108,50 @@ Steps taken for cleaning:
       SELECT COUNT(CASE WHEN ride_id IS NULL THEN 1 END) AS null_count,
         COUNT(ride_id) AS non_null_count
       FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ;
       ```
-    - I determined I only wanted to eliminate rows with no valid ride_id, there were no NULL values.
-    - I could have eliminated rows with NULL station_start or station_end values, but I decided to keep them in the analysis for multiple reasons:
-        - The rides had a ride_id so they must have been trips that people have taken,
+    - I determined I only wanted to eliminate rows with no valid 'ride_id' value, but there were no NULL values.
+    - I could have eliminated rows with NULL 'station_start' or 'station_end' values, but I decided to keep them in the analysis for multiple reasons:
+        - The rides had a 'ride_id' value so they must have been trips that people have taken,
         - I didn’t know whether station_start or station_end meant a transit station or a bike docking station – if it meant a transit station it is realistic that many trips were started in the middle of a street as opposed to a transit station.
-- Checked for duplicate ride_id values to ensure I wasn’t counting any trip twice.
+- Checked for duplicate 'ride_id' values to ensure I wasn’t counting any trip twice.
     - ``` SQL
       SELECT ride_id,
         COUNT(*) AS count_of_ride_id
       FROM 'data-analytics-capstone-437301.capstone.yearly_data'
       GROUP BY ride_id
       HAVING count_of_ride_id > 1
+      ;
       ```
-o	There were duplicates, so I had to figure out a way to only include one version of the trip.
-	All duplicates were on Friday, May 31st – could be useful information for programmers.
-•	Created the “ride_id_count” and “duplicate_rank” columns.
-o	Insert query
-o	I ranked all the trips, using the ended_at column to distinguish between the duplicates. There was little information between the two duplicate rows to distinguish between them. I reviewed each row individually because there were only around 200 duplicates, so I knew a RANK() function would work; however, if there was absolutely no way to distinguish between the duplicates, a ROW_NUMBER() function would’ve also worked.
-o	Checked to ensure that no trips were duplicated more than once. From the previous step, I saw that there was only around 200 duplicates and didn’t see any ride_id value with a count higher than 2, but I created a query anyways to be sure.
-o	Insert query
-•	Created the “ride_length” column as an INTERVAL to determine trip length for each trip.
-o	Insert query
+    - There were duplicates, so I had to figure out a way to only include one version of the trip.
+        - All duplicates were on Friday, May 31st – could be useful information for programmers.
+- Created the 'ride_id_count' and 'duplicate_rank' columns, and overwrote the existing table with these results.
+    - ```SQL
+      SELECT *,
+        COUNT(ride_id) OVER(PARTITION BY ride_id ORDER BY ride_id) AS ride_id_count,
+        RANK() OVER(PARTITION BY ride_id ORDER BY ended_at) AS duplicate_rank
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ORDER BY ride_id_count DESC,
+      ride_id,
+      duplicate_rank
+      ;
+      ```
+    - I ranked all the trips, using the 'ended_at' column to distinguish between the duplicates. There was little information between the two duplicate rows to distinguish between them. I reviewed each row individually because there were only around 200 duplicates, so I knew a RANK() function would work; however, if there was absolutely no way to distinguish between the duplicates, a ROW_NUMBER() function would’ve also worked.
+    - Checked to ensure that no trips were duplicated more than once. From the previous step, I saw that there was only around 200 duplicates and didn’t see any ride_id value with a count higher than 2, but I created a query anyways to be sure.
+        - ``` SQL
+          SELECT *
+          FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+          WHERE ride_id_count > 2
+          ;
+          ```
+        - There were no 'ride_id' values that occurred more than twice.
+- Created the “ride_length” column as an INTERVAL to determine trip length for each trip.
+    - ``` SQL
+      SELECT *,
+        ended_at - started_at AS ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data'
+      ;
+      ```
 o	I tried to change the format of the INTERVAL column but unfortunately there is no way to do so in BigQuery while also storing the data as an INTERVAL. I could have extracted the hours, minutes, and seconds and created a column as a STRING, but then it will not be as useful for analysis.
 •	Converted “started_at” from UTC to the local Chicago time zone (Central Time), stored as a DATETIME so it’s not stored and displayed in UTC, but Central Time.
 o	Insert query
