@@ -45,10 +45,10 @@ ORDER BY a.ride_id
 
 No need for the join, to simply check the following code suffices:*/
 SELECT ride_id, 
-  COUNT(*) AS COUNT_OF_RIDEID
+  COUNT(*) AS count_of_ride_id
 FROM data-analytics-capstone-437301.capstone.yearly_data
 GROUP BY ride_id
-HAVING COUNT_OF_RIDEID > 1 
+HAVING count_of_ride_id > 1 
 
 -- Displays all duplicates together, ranks them to distinguish between them, overwrote table
 SELECT *,
