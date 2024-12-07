@@ -504,7 +504,7 @@ After cleaning my data in the previous step, I now had a clean new table with da
         member_casual
       ;
       ```
-### Trips by Month
+### Trips by Month and Season
 - Trip count by month
     - ``` SQL
       SELECT EXTRACT(MONTH FROM started_at) AS month,
