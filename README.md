@@ -74,7 +74,7 @@ I chose to use SQL in BigQuery Studio because Excel and Google Sheets ran too sl
 
 Steps taken for cleaning:
 
-[01. Process - Data Cleaning.sql](https://github.com/cavalierej/cyclistic-case-study/blob/9fe55fa63f2bb74c342d0276f567ef5acc05121d/01.%20Process%20-%20Data%20Cleaning.sql)
+[01. Process - Data Cleaning.sql](https://github.com/cavalierej/cyclistic-case-study/blob/9fe55fa63f2bb74c342d0276f567ef5acc05121d/01.%20Process%20-%20Data%20Cleaning.sql) (All SQL queries combined in a file)
 
 - Downloaded all 12 datasets from divvy-tripdata for the most recent year, at the time it was September 2023 – August 2024.
 -	Unzipped all files.
