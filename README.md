@@ -247,3 +247,38 @@ Steps taken for cleaning:
 After performing these steps to clean my dataset, it was then ready to be analyzed.
 
 # Analyze
+## Guiding questions
+- How should you organize your data to perform analysis on it?
+- Has your data been properly formatted?
+- What surprises did you discover in the data?
+- What trends or relationships did you find in the data?
+- How will these insights help answer your business questions?
+## Key tasks
+- Aggregate your data so it’s useful and accessible.
+- Organize and format your data.
+- Perform calculations.
+- Identify trends and relationships.
+
+After cleaning my data in the previous step, I now had a clean new table with data that was ready to be analyzed, called “yearly_data_cleaned”. I used SQL to perform various calculations, to obtain information like trip counts and average ride length by periods of time and type of user.
+
+- Total trips
+    - ``` SQL
+      SELECT COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      ;
+      ```
+- Average trip length
+    - ``` SQL
+      SELECT AVG(ride_length) AS average_trip_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      ;
+      ```
+- Total trips by time of day
+    - ``` SQL
+      SELECT time_of_day,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY time_of_day
+      ORDER BY trip_count DESC
+      ;
+      ```
