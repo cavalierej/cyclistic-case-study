@@ -261,6 +261,9 @@ After performing these steps to clean my dataset, it was then ready to be analyz
 
 After cleaning my data in the previous step, I now had a clean new table with data that was ready to be analyzed, called “yearly_data_cleaned”. I used SQL to perform various calculations, to obtain information like trip counts and average ride length by periods of time and type of user.
 
+
+
+### Overall Trip Count
 - Total trips
     - ``` SQL
       SELECT COUNT(*) AS trip_count
@@ -273,7 +276,106 @@ After cleaning my data in the previous step, I now had a clean new table with da
       FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
       ;
       ```
-- Total trips by time of day
+- Trip count by member type
+    - ``` SQL
+      SELECT member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY member_casual
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by rideable type
+    - ``` SQL
+      SELECT rideable_type,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY rideable_type
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by member type and rideable type
+    - ``` SQL
+      SELECT member_casual,
+        rideable_type,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY member_casual,
+        rideable_type
+      ORDER BY trip_count DESC
+      ;
+      ```
+### Overall Ride Length
+- Ride length by member type
+    - ``` SQL
+      SELECT member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY member_casual
+      ;
+      ```
+- Ride length by bike type
+    - ``` SQL
+      SELECT rideable_type,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY rideable_type
+      ;
+      ```
+- Ride length by member type and bike type
+    - ``` SQL
+      SELECT member_casual
+        rideable_type,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY member_casual,
+        rideable_type
+      ;
+      ```
+### Trips by Hour and Time of Day
+- Trip count by hour
+    - ``` SQL
+      SELECT EXTRACT(HOUR FROM started_at) AS hour,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY hour
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by hour and member type
+    - ``` SQL
+      SELECT EXTRACT(HOUR FROM started_at) AS hour,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY hour,
+        member_casual
+      ORDER BY hour,
+        member_casual
+      ;
+      ```
+- Average ride length by hour
+    - ``` SQL
+      SELECT EXTRACT(HOUR FROM started_at) AS hour,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY hour
+      ORDER BY hour
+      ;
+      ```
+- Average ride length by hour and member type
+    - ``` SQL
+      SELECT EXTRACT(HOUR FROM started_at) AS hour,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY hour,
+        member_casual
+      ORDER BY hour,
+        member_casual
+      ;
+      ```
+- Trip count by time of day
     - ``` SQL
       SELECT time_of_day,
         COUNT(*) AS trip_count
@@ -282,3 +384,292 @@ After cleaning my data in the previous step, I now had a clean new table with da
       ORDER BY trip_count DESC
       ;
       ```
+- Trip count by time of day and member type
+    - ``` SQL
+      SELECT time_of_day,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY time_of_day,
+        member_casual
+      ORDER BY time_of_day,
+        member_casual
+      ;
+      ```
+- Average ride length by time of day
+    - ``` SQL
+      SELECT time_of_day,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY time_of_day
+      ORDER BY time_of_day
+      ;
+      ```
+- Average ride length by time of day and member type
+    - ``` SQL
+      SELECT time_of_day,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY time_of_day,
+        member_casual
+      ORDER BY time_of_day,
+        member_casual
+      ;
+      ```
+### Trips by Day and Type of Day
+- Trip count by day
+    - ``` SQL
+      SELECT day_of_week,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY day_of_week
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by day and member type
+    - ``` SQL
+      SELECT day_of_week,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY day_of_week,
+        member_casual
+      ORDER BY day_of_week,
+        member_casual
+      ;
+      ```
+- Average ride length by day
+    - ``` SQL
+      SELECT day_of_week,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY day_of_week
+      ORDER BY day_of_week
+      ;
+      ```
+- Average ride length by day and member type
+    - ``` SQL
+      SELECT day_of_week,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY day_of_week,
+        member_casual
+      ORDER BY day_of_week,
+        member_casual
+      ;
+      ```
+- Trip count by type of day
+    - ``` SQL
+      SELECT type_of_day,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY type_of_day
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by type of day and member type
+    - ``` SQL
+      SELECT type_of_day,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY type_of_day,
+        member_casual
+      ORDER BY type_of_day,
+        member_casual
+      ;
+      ```
+- Average ride length by type of day
+    - ``` SQL
+      SELECT type_of_day,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY type_of_day
+      ORDER BY type_of_day
+      ;
+      ```
+- Average ride length by type of day and member type
+    - ``` SQL
+      SELECT type_of_day,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY type_of_day,
+        member_casual
+      ORDER BY type_of_day,
+        member_casual
+      ;
+      ```
+### Trips by Month
+- Trip count by month
+    - ``` SQL
+      SELECT EXTRACT(MONTH FROM started_at) AS month,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY month
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by month and member type
+    - ``` SQL
+      SELECT EXTRACT(MONTH FROM started_at) AS month,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY month,
+        member_casual
+      ORDER BY month,
+        member_casual
+      ;
+      ```
+- Average ride length by month
+    - ``` SQL
+      SELECT EXTRACT(MONTH FROM started_at) AS month,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY month
+      ORDER BY month
+      ;
+      ```
+- Average ride length by month and member type
+    - ``` SQL
+      SELECT EXTRACT(HOUR FROM started_at) AS month,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY month,
+        member_casual
+      ORDER BY month,
+        member_casual
+      ;
+      ```
+- Trip count by season
+    - ``` SQL
+      SELECT season,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY season
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Trip count by season and member type
+    - ``` SQL
+      SELECT season,
+        member_casual,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY season,
+        member_casual
+      ORDER BY season,
+        member_casual
+      ;
+      ```
+- Average ride length by season
+    - ``` SQL
+      SELECT season,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY season
+      ORDER BY season
+      ;
+      ```
+- Average ride length by season and member type
+    - ``` SQL
+      SELECT season,
+        member_casual,
+        AVG(ride_length_in_minutes) AS average_ride_length
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY season,
+        member_casual
+      ORDER BY season,
+        member_casual
+      ;
+      ```
+### Most Frequent Stations
+- Most frequent starting stations
+    - ``` SQL
+      SELECT start_station_name,
+        start_station_id,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY start_station_name,
+        start_station_id
+      HAVING trip_count >= 1000
+      ORDER BY trip_count DESC
+      ;
+      ```
+- Most frequent ending stations
+    - ``` SQL
+      SELECT end_station_name,
+        end_station_id,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY end_station_name,
+        end_station_id
+      HAVING trip_count >= 1000
+      ORDER BY trip_count DESC
+      ;
+      ```
+- When making the charts related these two queries in Tableau, I discovered some stations were the same but listed as different stations. For example, some entries of a station used a "/" to indicate an intersection, whereas other entries of the same station_id used a "&".
+    - I could not edit the entries in BigQuery, so I had to make a new column in Tableau that reflected the fix.
+- Most frequent trips
+    - ``` SQL
+      SELECT start_station_name,
+        start_station_id,
+        end_station_name,
+        end_station_id,
+        COUNT(*) AS trip_count
+      FROM 'data-analytics-capstone-437301.capstone.yearly_data_cleaned'
+      GROUP BY start_station_name,
+        start_station_id,
+        end_station_name,
+        end_station_id
+      HAVING trip_count >= 1000
+      ORDER BY trip_count DESC
+      ;
+      ```
+# Share
+## Guiding Questions
+- Were you able to answer the question of how annual members and casual riders use Cyclistic bikes differently?
+- What story does your data tell?
+- How do your findings relate to your original question? 
+- Who is your audience? What is the best way to communicate with them? 
+- Can data visualization help you share your findings?
+- Is your presentation accessible to your audience?
+## Key Tasks
+- Determine the best way to share your findings.
+- Create effective data visualizations.
+- Present your findings.
+- Ensure your work is accessible
+
+[Tableau Report](https://public.tableau.com/views/CyclisticPresentationDashboard/CyclisticPresentation?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
+
+I struggled to import my table into a visualization platform, as my table was too large to download from BigQuery, without a paid subscription. Luckily, I was able to begin a free trial of Tableau and connect my table to Tableau. I was then able to create an extraction in Tableau and work on my project in Tableau Public, so I would have access to it after my trial expired. I created various visualizations displaying similar information from the queries in the previous phase.
+
+This step took the longest amount of time, as it required time to re-familiarize myself with Tableau and it’s features. I tried displaying information in various types of ways, using different types of chart, and trying to combine similar types data into the same chart. For example, at first I created pie charts to display the total trip count broken down by user type, but settled on a bar chart to follow best practice.
+
+Once I was happy with my charts, I sketched various drafts of a dashboard to layout the information I wanted to display. At first, I wanted an interactive bar chart, but then decided that using a more typical dashboard was not conducive to also featuring explanations of my analysis. I then decided to layout the information in a way more similar to an infographic, as this would allow me to present my insights in a way that made better sense to me. After drafting some rough sketches and I was happy with a layout, I used Figma to recreate my final sketch. I then used the Figma to Tableau plugin to connect my charts to the appropriate sections in my Figma layout.
+
+I ensured to follow data visualization best practices, such as removing anything that distracts from the information presented like lines, words, numbers, etc.
+# Act
+## Guiding Questions
+- What is your final conclusion based on your analysis?
+- How could your team and business apply your insights?
+- What next steps would you or your stakeholders take based on your findings?
+- Is there additional data you could use to expand on your findings?
+## Key Tasks
+- Create your portfolio.
+- Add your case study.
+- Practice presenting your case study to a friend or family member
+
+My top three recommendations based on my analysis:
+1.	Target casual users to use Cyclistic for more than leisure rides.
+a.	Various indicators in the data indicate that casual users use Cyclistic bikes for leisure rides. Casual users on classic bikes have the longest average ride length, at almost 40 minutes. Additionally, Saturday and Sunday are the days when casual users use bikes most as a proportion of all trips on a given day. We can also see that the majority of casual users use bikes in warmer months, whereas members usage is more spread out amongst the whole year. These factors indicate casual users use bikes for leisure or exercise, and perhaps they can be convinced to become members and use the bikes for other trips too, such as going to work, running errands, and visiting others. I would explore creating a targeted marketing campaign for casual users to achieve this. 
+2.	Create additional stations near locations where most trips start and end.
+a.	In several of the locations where trips begin and end most frequently for casual users, those stations are either quite isolated or are next to a station where trips begin less frequently. Potentially, this could lead to a shortage of bikes which causes them to skip using a bike altogether. If there are more bikes available where casual users need them, they are more likely to use the service more frequently and become members.
+3.	Add winterization features to bikes to make them more suited to use in colder months.
+a.	Usage from both types of users drops significantly in the colder months, but especially amongst casual users. Perhaps bikes could be equipped with features such as winter tires or heated seats and handlebars, to make bike rides more comfortable and encourage more usage in colder weather. This can be marketed to casual users in warmer months when they are already using Cyclistic, and in locations where they are already using bikes.
+Conclusion
+I learned many valuable skills and lessons while completing this capstone project. I was able to refine my SQL skills and gain a more in-depth understanding of Tableau as I hardly used it before. I learned how to effectively present information and how to follow best practices for data visualizations. I also learned a new skill in Figma, which I believe is very a useful tool to layout dashboards or infographics to present data and information.
