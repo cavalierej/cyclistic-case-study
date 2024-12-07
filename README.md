@@ -4,7 +4,7 @@ This case study is the capstone project for the Google Data Analytics Certificat
 **Tools used:** BigQuery, SQL, Tableau, Figma
 
 ## Quick Links
-[Tableau Report](https://public.tableau.com/views/CyclisticPresentationDashboard/CyclisticPresentation?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) | [Data Cleaning SQL Queries](https://github.com/cavalierej/cyclistic-case-study/blob/0773ed3e7df8b406ab9613e8739beba83cc525c2/01.%20Process%20-%20Data%20Cleaning.sql)
+[Tableau Report](https://public.tableau.com/views/CyclisticPresentationDashboard/CyclisticPresentation?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link) | [Data Cleaning SQL Queries](https://github.com/cavalierej/cyclistic-case-study/blob/0773ed3e7df8b406ab9613e8739beba83cc525c2/01.%20Process%20-%20Data%20Cleaning.sql) | [Data Analysis SQL Queries](https://github.com/cavalierej/cyclistic-case-study/blob/ecc24d5099041e0e55b85dc4bd9c749b96d6e10c/02.%20Analyze.sql)
 
 # Background
 ## Cyclistic
