@@ -48,7 +48,7 @@ ride_id,
 duplicate_rank
 ;
 
---Checking that there are no ride_id values were duplicated more than once
+--Checking no ride_id values were duplicated more than once
 SELECT *
 FROM 'data-analytics-capstone-437301.capstone.yearly_data'
 WHERE ride_id_count > 2
